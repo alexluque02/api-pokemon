@@ -1,3 +1,21 @@
+@font-face {
+    font-family: Spartan;
+    src: url(../LeagueSpartan-VariableFont_wght.ttf);
+}
+
+.busqueda input::placeholder {
+    color: azure;
+}
+
+.barraBuscar {
+    background-color: #3B5BA7;
+}
+
+body {
+    font-family: Spartan;
+}
+
+/*
 .carta {
     width: 185px;
     height: 130px;
@@ -49,3 +67,4 @@
     top: 0px;
     position: absolute
 }
+*/
