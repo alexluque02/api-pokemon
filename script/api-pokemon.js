@@ -29,6 +29,45 @@ $(document).ready(function () {
             indice++;
         });
     });
+    /*
+    $.ajax({
+        type: "GET",
+        url: "https://pokeapi.co/api/v2/pokemon/" + indice + "/",
+        success: function (response) {
+            var listadoPokemon = resp.results;
+            var indice = 1;
+            listadoPokemon.forEach(pokemon => {
+            var informacion=response.results;
+            var template2=`
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">${pokemon.name}</h5>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">X
+            </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <ul>
+                    <li>Habitat:${pokemon.base_experience}</li>
+                    <li>Habilities:</li>
+                    <li>Height:${pokemon.height}</li>
+                    <li>Weight:${pokemon.weight}</li>
+                </ul>
+            </table>
+            <img src="../img/1.png">
+            <div class="frame1" id="tipoPokemon">
+                <div class="text-wrapper1" id="tipo">Plant</div>
+            </div>
+            <div class="frame2">
+                <div class="text-wrapper2">Poison</div>
+            </div>
+        </div>
+            `
+            $('#modalCharacter').append(template2);
+        });
+    }
+           
+    });
+    */
 });
 /*
           <div style="position: relative;">
