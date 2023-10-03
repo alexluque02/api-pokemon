@@ -15,6 +15,58 @@ body {
     font-family: Spartan;
 }
 
+.frame1 {
+    display: flex;
+    width: 171px;
+    height: 37px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    position: relative;
+    background-color: #5da127f7;
+    border-radius: 10px;
+}
+
+.frame1 .text-wrapper1 {
+    position: relative;
+    width: fit-content;
+    margin-top: -1.5px;
+    font-family: "Spartan-ExtraBold", Helvetica;
+    font-weight: 800;
+    color: #fffdfb;
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.frame2 {
+    display: flex;
+    width: 171px;
+    height: 37px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    position: relative;
+    background-color: #561bff75;
+    border-radius: 10px;
+}
+
+.frame2 .text-wrapper2 {
+    position: relative;
+    width: fit-content;
+    margin-top: -1.5px;
+    font-family: "Spartan-ExtraBold", Helvetica;
+    font-weight: 800;
+    color: #fffdfb;
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+}
+
 /*
 .carta {
     width: 185px;
