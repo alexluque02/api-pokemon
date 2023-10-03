@@ -43,6 +43,11 @@ body {
     margin-left: 10px;
 }
 
+@media (max-width: 1000px) {
+    .habitats h5 {
+        font-size: 0.4em;
+    }
+}
 
 
 /*
