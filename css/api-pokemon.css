@@ -14,3 +14,57 @@
 body {
     font-family: Spartan;
 }
+
+/*
+.carta {
+    width: 185px;
+    height: 130px;
+    left: 0px;
+    top: 38px;
+    position: relative;
+    background: white;
+    border-radius: 20px
+}
+
+.letrero-carta {
+    width: 150px;
+    height: 30px;
+    padding-left: 18px;
+    padding-right: 15px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    position: relative;
+    background: #676767;
+    box-shadow: 0px 2px 26px rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: inline-flex;
+}
+
+.idPokemon {
+    text-align: center;
+    color: #F993FB;
+    font-size: 12px;
+    font-family: Spartan;
+    font-weight: 800;
+    word-wrap: break-word
+}
+
+.namePokemon {
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    font-family: Spartan;
+    font-weight: 800;
+    word-wrap: break-word
+}
+
+.pokemonImg {
+    width: 86.75px;
+    height: 102.04px;
+    left: 50.17px;
+    top: 0px;
+    position: absolute
+}
+*/
