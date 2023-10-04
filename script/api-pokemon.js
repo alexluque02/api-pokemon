@@ -1,10 +1,10 @@
 $(document).ready(function () {
+    var url = "https://pokeapi.co/api/v2/pokemon"
     $.ajax({
         type: "GET",
         url: "https://pokeapi.co/api/v2/pokemon?limit=1200/",
     }).done(function (resp) {
         var listadoPokemon = resp.results;
-        var indice = 1;
         listadoPokemon.forEach(pokemon => {
             var template = `
             <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
@@ -15,10 +15,9 @@ $(document).ready(function () {
                                     <div class="card-body">
                                         <h5 class="card-title">${pokemon.name}</h5>
                                         <p class="card-text">
-                                            <li>#${indice}</li>
+                                            <li>#${getPokemonIdFromUrl(pokemon.url)}</li>
                                         </p>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalDetails">More details</button>
+                                        <button type="button" class="btn btn-primary moredetails" pokeid="${getPokemonIdFromUrl(pokemon.url)}">More details</button>
 
                                     </div>
                                 </div>
@@ -26,55 +25,34 @@ $(document).ready(function () {
                             </div>
             `;
             $('#listadoPokemon').append(template);
-            indice++;
         });
     });
-    /*
-    $.ajax({
-        type: "GET",
-        url: "https://pokeapi.co/api/v2/pokemon/" + indice + "/",
-        success: function (response) {
-            var listadoPokemon = resp.results;
-            var indice = 1;
-            listadoPokemon.forEach(pokemon => {
-            var informacion=response.results;
-            var template2=`
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">${pokemon.name}</h5>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">X
-            </button>
-        </div>
-        <div class="modal-body">
-            <table>
-                <ul>
-                    <li>Habitat:${pokemon.base_experience}</li>
-                    <li>Habilities:</li>
-                    <li>Height:${pokemon.height}</li>
-                    <li>Weight:${pokemon.weight}</li>
-                </ul>
-            </table>
-            <img src="../img/1.png">
-            <div class="frame1" id="tipoPokemon">
-                <div class="text-wrapper1" id="tipo">Plant</div>
-            </div>
-            <div class="frame2">
-                <div class="text-wrapper2">Poison</div>
-            </div>
-        </div>
-            `
-            $('#modalCharacter').append(template2);
-        });
-    }
-           
-    });
-    */
+
 });
-/*
-          <div style="position: relative;">
-                <div class="carta"></div>
-                        <div class="letrero-carta">
-                            <div class="idPokemon"></div>
-                            <div class="namePokemon"></div>
-                            </div>
-                            <img class="pokemonImg" src="" />
-            </div>*/
+$(document).on('click', '.moredetails', function (poke) {
+    var pokemonId = $(this).attr('pokeid');
+    $.ajax({
+        url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+        type: 'GET',
+    }).done(function (response) {
+        ability = response.abilities[0].ability.name;
+        //Recorrer array
+        type1 = response.types[0].type.name;
+        type2 = response.types[1].type.name;
+
+        var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
+        $('#imagenPokemon').attr('src', newSrc);
+
+        $("#tipo1").text(type1);
+        $("#tipo2").text(type2);
+        $('#nombrePokemon').text("Name:" + response.name);
+        $('#habilidadPokemon').text("Habilidad:" + ability);
+        $('#alturaPokemon').text("Height:" + response.height + "fts");
+        $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
+        $('#modalDetails').modal('show')
+    });
+})
+function getPokemonIdFromUrl(url) {
+    // Sacar id de la url de pokemon
+    return url.split('/').reverse()[1];
+}

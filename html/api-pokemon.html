@@ -58,27 +58,47 @@
                 <div class="carousel-item active">
                     <div class="container">
                         <div class="row" id="listadoPokemon">
+                            <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalCenterTitle" style="color: black;">
 
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content" id="modalCharacter">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="nombrePokemon"></h5>
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                                aria-label="Close">X
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table>
+                                                <ul>
+                                                    <li id="habitatPokemon">Habitat:unknown</li>
+                                                    <li id="habilidadPokemon">Habilities:unknown</li>
+                                                    <li id="alturaPokemon">Height:unknown</li>
+                                                    <li id="pesoPokemon">Weight:unknown</li>
+                                                </ul>
+                                            </table>
+                                            <img src="../img/1.png" id="imagenPokemon">
+                                            <div class="frame1" id="tipoPokemon">
+                                                <div class="text-wrapper1" id="tipo1">Plant</div>
+                                            </div>
+                                            <div class="frame2">
+                                                <div class="text-wrapper2" id="tipo2">Poison</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!--MODAL-->
-        <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-            style="color: black;">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="modalCharacter">
-                    
-                    <!--Peticion diferente-->
-                    <div class="frame1" id="tipoPokemon">
-                        <div class="text-wrapper1" id="tipo">Plant</div>
-                    </div>
-                    <div class="frame2">
-                        <div class="text-wrapper2">Poison</div>
-                    </div>
+                <!--MODAL-->
+                <div id="details">
+
                 </div>
+
             </div>
         </div>
     </main>
