@@ -1,6 +1,8 @@
 $(document).ready(function () {
     var listadoPokemon;
     var elementosPokemonOcultos = [];
+    var campoDeBusqueda = $('.barraBuscar');
+    var botonBusqueda = $('.btn-search');
 
     $.ajax({
         type: "GET",
@@ -32,6 +34,24 @@ $(document).ready(function () {
             $('#listadoPokemon').append(template);
             indice++;
 
+        });
+        $(document).on('click', botonBusqueda, function () {
+            // Obtén el valor del campo de búsqueda
+            var valorBusqueda = campoDeBusqueda.val().toLowerCase();
+
+            // Realiza la búsqueda en los elementos que deseas filtrar (por ejemplo, en los nombres de los Pokémon)
+            $('.cartaPokemon').each(function () {
+                var nombrePokemon = $(this).find('.card-title').text().toLowerCase();
+
+                // Comprueba si el nombre del Pokémon contiene el texto de búsqueda
+                if (nombrePokemon.includes(valorBusqueda)) {
+                    // Muestra el elemento si coincide con la búsqueda
+                    $(this).show();
+                } else {
+                    // Oculta el elemento si no coincide con la búsqueda
+                    $(this).hide();
+                }
+            });
         });
     });
 
