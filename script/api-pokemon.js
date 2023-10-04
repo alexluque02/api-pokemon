@@ -1,16 +1,19 @@
 $(document).ready(function () {
-    var url = "https://pokeapi.co/api/v2/pokemon"
+    var listadoPokemon;
+    var elementosPokemonOcultos = [];
     $.ajax({
         type: "GET",
-        url: "https://pokeapi.co/api/v2/pokemon?limit=1200/",
+        url: "https://pokeapi.co/api/v2/pokemon?limit=151/",
     }).done(function (resp) {
-        var listadoPokemon = resp.results;
+        listadoPokemon = resp.results;
         listadoPokemon.forEach(pokemon => {
+
+            var nameReplace = pokemon.name.replace(/-/g, "_");
             var template = `
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
                                 <a href=""></a>
                                 <div class="card">
-                                    <img src="https://www.pkparaiso.com/imagenes/xy/sprites/animados/${pokemon.name}.gif" style="height:150px; width:110px; text-align:center;"
+                                    <img src="https://www.pkparaiso.com/imagenes/xy/sprites/animados/${nameReplace}.gif" style="height:150px; width:110px; text-align:center;"
                                         class="card-img-top" alt="" />
                                     <div class="card-body">
                                         <h5 class="card-title">${pokemon.name}</h5>
@@ -25,38 +28,109 @@ $(document).ready(function () {
                             </div>
             `;
             $('#listadoPokemon').append(template);
+
         });
     });
 
-});
-$(document).on('click', '.moredetails', function (poke) {
-    var pokemonId = $(this).attr('pokeid');
     $.ajax({
-        url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
-        type: 'GET',
-    }).done(function (response) {
-        ability = response.abilities[0].ability.name;
-        //Recorrer array
+        type: "GET",
+        url: "https://pokeapi.co/api/v2/pokemon-habitat/"
+    }).done(function (resp) {
+        var listHabitat = resp.results;
+        var habitatList = [];
 
-        var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
-        $('#imagenPokemon').attr('src', newSrc);
-        
-        if (response.types[0]) {
-            type1 = response.types[0].type.name;
-            $("#tipo1").text(type1);
-          }
-          if (response.types[1]?.type) {
-            type2 = response.types[1].type.name;
-            $("#tipo2").text(type2);
-          }
-        $('#nombrePokemon').text("Name:" + response.name);
-        $('#habilidadPokemon').text("Habilidad:" + ability);
-        $('#alturaPokemon').text("Height:" + response.height + "fts");
-        $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
-        $('#modalDetails').modal('show')
+        listHabitat.forEach(habitat => {
+            habitatList.push(habitat.name);
+        });
+
+        var habitatLinks = habitatList.map(function (habitatName) {
+            return `<button type="button" class="btn btn-filter-habitat" habitat="${habitatName}">${habitatName}</button>`;
+        });
+
+        var template = `
+        <div class="habitats col-12 bg-light m-3 d-flex w-100">
+            <button type="button" id="allHabitats" class="btn"><h5>ALL</h5></button>
+            <h5 style="text-transform: uppercase;">${habitatLinks.join("&nbsp; ")}</h5>
+            <button type="button" id="back-btn" class="btn"><i class="bi bi-arrow-left-short"></i></button>
+        </div>
+        `;
+
+
+        $('#listadoHabitats').hide();
+        $('#listadoHabitats').append(template);
+
+        $(document).on('click', '#selectHabitats', function () {
+            $('#selectHabitats').hide();
+            $('#listadoHabitats').show();
+
+            $(document).on('click', '#allHabitats', function () {
+                elementosPokemonOcultos.forEach(function (elemento) {
+                    elemento.show();
+                });
+            })
+
+        })
+
+        $(document).on('click', '#back-btn', function () {
+            $('#listadoHabitats').hide();
+            $('#selectHabitats').show();
+        })
     });
-})
-function getPokemonIdFromUrl(url) {
-    // Sacar id de la url de pokemon
-    return url.split('/').reverse()[1];
-}
+
+    $(document).on('click', '.btn-filter-habitat', function () {
+        var habitatClicked = $(this).attr("habitat");
+
+        // Mostrar todos los elementos ocultos cuando se filtra un hábitat
+        elementosPokemonOcultos.forEach(function (elemento) {
+            elemento.show();
+        });
+
+        $.ajax({
+            type: "GET",
+            url: `https://pokeapi.co/api/v2/pokemon-habitat/${habitatClicked}`
+        }).done(function (resp) {
+            var pokemonListInHabitat = resp.pokemon_species.map(pokemon => pokemon.name);
+
+            // Ocultar Pokémon que no pertenecen al hábitat
+            listadoPokemon.forEach(pokemon => {
+                if (!pokemonListInHabitat.includes(pokemon.name)) {
+                    var elementoPokemon = $(`#${pokemon.name}`);
+                    elementoPokemon.hide();
+                    elementosPokemonOcultos.push(elementoPokemon);
+                }
+            });
+        });
+    });
+    $(document).on('click', '.moredetails', function () {
+        var pokemonId = $(this).attr('pokeid');
+        $.ajax({
+            url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+            type: 'GET',
+        }).done(function (response) {
+            ability = response.abilities[0].ability.name;
+            //Recorrer array
+
+            var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
+            $('#imagenPokemon').attr('src', newSrc);
+
+            if (response.types[0].type) {
+                type1 = response.types[0].type.name;
+                $("#tipo1").text(type1);
+            }
+            if (response.types[1]?.type) {
+                type2 = response.types[1].type.name;
+                $("#tipo2").text(type2);
+            }
+
+            $('#nombrePokemon').text("Name:" + response.name);
+            $('#habilidadPokemon').text("Habilidad:" + ability);
+            $('#alturaPokemon').text("Height:" + response.height + "fts");
+            $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
+            $('#modalDetails').modal('show')
+        });
+    })
+    function getPokemonIdFromUrl(url) {
+        // Sacar id de la url de pokemon
+        return url.split('/').reverse()[1];
+    }
+});
