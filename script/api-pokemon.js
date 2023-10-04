@@ -37,14 +37,18 @@ $(document).on('click', '.moredetails', function (poke) {
     }).done(function (response) {
         ability = response.abilities[0].ability.name;
         //Recorrer array
-        type1 = response.types[0].type.name;
-        type2 = response.types[1].type.name;
 
         var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
         $('#imagenPokemon').attr('src', newSrc);
-
-        $("#tipo1").text(type1);
-        $("#tipo2").text(type2);
+        
+        if (response.types[0]) {
+            type1 = response.types[0].type.name;
+            $("#tipo1").text(type1);
+          }
+          if (response.types[1]?.type) {
+            type2 = response.types[1].type.name;
+            $("#tipo2").text(type2);
+          }
         $('#nombrePokemon').text("Name:" + response.name);
         $('#habilidadPokemon').text("Habilidad:" + ability);
         $('#alturaPokemon').text("Height:" + response.height + "fts");
