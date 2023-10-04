@@ -113,15 +113,25 @@ $(document).ready(function () {
             var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
             $('#imagenPokemon').attr('src', newSrc);
 
-            if (response.types[0].type) {
+            let type1 = '';
+            let type2 = '';
+
+            $('#tipoPokemon, .frame2').hide();
+
+            if (response.types[0]?.type) {
                 type1 = response.types[0].type.name;
-                $("#tipo1").text(type1);
-            }
-            if (response.types[1]?.type) {
-                type2 = response.types[1].type.name;
-                $("#tipo2").text(type2);
+                $('#tipoPokemon').show();
+
+                $('#tipo1').text(type1);
+
             }
 
+            if (response.types.length > 1 && response.types[1]?.type) {
+                type2 = response.types[1].type.name;
+                $('.frame2').show();
+
+                $('#tipo2').text(type2);
+            }
             $('#nombrePokemon').text("Name:" + response.name);
             $('#habilidadPokemon').text("Habilidad:" + ability);
             $('#alturaPokemon').text("Height:" + response.height + "fts");
