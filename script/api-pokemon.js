@@ -1,36 +1,33 @@
 $(document).ready(function () {
     var listadoPokemon;
     var elementosPokemonOcultos = [];
-
     $.ajax({
         type: "GET",
         url: "https://pokeapi.co/api/v2/pokemon?limit=151/",
     }).done(function (resp) {
         listadoPokemon = resp.results;
-        var indice = 1;
         listadoPokemon.forEach(pokemon => {
 
             var nameReplace = pokemon.name.replace(/-/g, "_");
             var template = `
             <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
-                <a href=""></a>
-                <div class="card">
-                    <img src="https://www.pkparaiso.com/imagenes/xy/sprites/animados/${nameReplace}.gif" style="height:150px; width:110px; text-align:center;"
-                        class="card-img-top" alt="" />
-                    <div class="card-body">
-                        <h5 class="card-title">${pokemon.name}</h5>
-                        <p class="card-text">
-                            <li>#${indice}</li>
-                        </p>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#modalDetails">More details</button>
-                    </div>
-                </div>
-                </a>
-            </div>
+                                <a href=""></a>
+                                <div class="card">
+                                    <img src="https://www.pkparaiso.com/imagenes/xy/sprites/animados/${nameReplace}.gif" style="height:150px; width:110px; text-align:center;"
+                                        class="card-img-top" alt="" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">${pokemon.name}</h5>
+                                        <p class="card-text">
+                                            <li>#${getPokemonIdFromUrl(pokemon.url)}</li>
+                                        </p>
+                                        <button type="button" class="btn btn-primary moredetails" pokeid="${getPokemonIdFromUrl(pokemon.url)}">More details</button>
+
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
             `;
             $('#listadoPokemon').append(template);
-            indice++;
 
         });
     });
@@ -104,6 +101,46 @@ $(document).ready(function () {
             });
         });
     });
+    $(document).on('click', '.moredetails', function () {
+        var pokemonId = $(this).attr('pokeid');
+        $.ajax({
+            url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+            type: 'GET',
+        }).done(function (response) {
+            ability = response.abilities[0].ability.name;
+            //Recorrer array
+
+            var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
+            $('#imagenPokemon').attr('src', newSrc);
+
+            let type1 = '';
+            let type2 = '';
+
+            $('#tipoPokemon, .frame2').hide();
+
+            if (response.types[0]?.type) {
+                type1 = response.types[0].type.name;
+                $('#tipoPokemon').show();
+
+                $('#tipo1').text(type1);
+
+            }
+
+            if (response.types.length > 1 && response.types[1]?.type) {
+                type2 = response.types[1].type.name;
+                $('.frame2').show();
+
+                $('#tipo2').text(type2);
+            }
+            $('#nombrePokemon').text("Name:" + response.name);
+            $('#habilidadPokemon').text("Habilidad:" + ability);
+            $('#alturaPokemon').text("Height:" + response.height + "fts");
+            $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
+            $('#modalDetails').modal('show')
+        });
+    })
+    function getPokemonIdFromUrl(url) {
+        // Sacar id de la url de pokemon
+        return url.split('/').reverse()[1];
+    }
 });
-
-
