@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var listadoPokemon;
-    var elementosPokemonOcultos = [];
     var campoDeBusqueda = $('#barraBuscar');
     //var botonBusqueda = $('#btn-search');
     var showAll = false;
@@ -10,73 +9,50 @@ $(document).ready(function () {
         url: "https://pokeapi.co/api/v2/pokemon?limit=1200/",
     }).done(function (resp) {
         listadoPokemon = resp.results;
-        listadoPokemon.forEach(pokemon => {
-            var template = `
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
-                                <a href=""></a>
-                                <div class="card">
-                                    <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height:150px; width:110px; text-align:center;"
-                                        class="card-img-top" alt="" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">${pokemon.name}</h5>
-                                        <p class="card-text">
-                                            <li>#${getPokemonIdFromUrl(pokemon.url)}</li>
-                                        </p>
-                                        <button type="button" class="btn btn-primary moredetails" pokeid="${getPokemonIdFromUrl(pokemon.url)}">More details</button>
+        mostrarListado(listadoPokemon)
 
-                                    </div>
-                                </div>
-                                </a>
-                            </div>
-            `;
-            $('#listadoPokemon').append(template);
-
-        });
-
-        $(document).on('keyup', '#barraBuscar', function () {
-            buscar();
-        });
-
-        function buscar() {
-            // Obtner el valor del campo de búsqueda
-            valorBusqueda = campoDeBusqueda.val().toLowerCase();
-
-            // Realiza la búsqueda en los elementos que deseas filtrar (por ejemplo, en los nombres de los Pokémon)
-            $('.cartaPokemon').each(function () {
-                var nombrePokemon = $(this).find('.card-title').text().toLowerCase();
-
-                // Comprueba si el nombre del Pokémon contiene el texto de búsqueda
-                if (nombrePokemon.includes(valorBusqueda)) {
-                    // Muestra el elemento si coincide con la búsqueda
-                    $(this).show();
-                } else {
-                    // Oculta el elemento si no coincide con la búsqueda
-                    $(this).hide();
-                }
-            });
-        }
+        $(document).on('click', '#allHabitats', function () {
+            $('#barraBuscar').val("");
+            $('#listadoPokemon').empty();
+            mostrarListado(listadoPokemon);
+            debugger;
+        })
     });
+
+    $(document).on('keyup', '#barraBuscar', function () {
+        buscar();
+    });
+
+    function buscar() {
+        valorBusqueda = campoDeBusqueda.val().toLowerCase();
+
+        $('.cartaPokemon').each(function () {
+            var nombrePokemon = $(this).find('.card-title').text().toLowerCase();
+            if (nombrePokemon.includes(valorBusqueda)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 
     $.ajax({
         type: "GET",
         url: "https://pokeapi.co/api/v2/pokemon-habitat/"
     }).done(function (resp) {
         valorBusqueda = "";
-        var listHabitat = resp.results;
-        var habitatList = [];
+        var habitatList = resp.results;
 
-        listHabitat.forEach(habitat => {
-            habitatList.push(habitat.name);
+        var habitatLinks = habitatList.map(habitat => {
+            return `<button type="button" class="btn btn-filter-habitat" habitatId="${getPokemonIdFromUrl(habitat.url)}">${habitat.name.toUpperCase()}</button>`;
         });
 
-        var habitatLinks = habitatList.map(function (habitatName) {
-            return `<button type="button" class="btn btn-filter-habitat" habitat="${habitatName}">${habitatName}</button>`;
-        });
+
 
         var template = `
         <div class="habitats col-12 bg-light m-3 d-flex w-100">
             <button type="button" id="allHabitats" class="btn"><h5>ALL</h5></button>
-            <h5 style="text-transform: uppercase;">${habitatLinks.join("&nbsp; ")}</h5>
+            <h5>${habitatLinks.join("&nbsp; ")}</h5>
             <button type="button" id="back-btn" class="btn"><i class="bi bi-arrow-left-short"></i></button>
         </div>
         `;
@@ -84,52 +60,69 @@ $(document).ready(function () {
 
         $('#listadoHabitats').hide();
         $('#listadoHabitats').append(template);
-
-        $(document).on('click', '#selectHabitats', function () {
-            $('#selectHabitats').hide();
-            $('#listadoHabitats').show();
-
-            $(document).on('click', '#allHabitats', function () {
-                showAll = true;
-                $('.barraBuscar').val("");
-                elementosPokemonOcultos.forEach(function (elemento) {
-                    elemento.show();
-                });
-            })
-
-        })
-
-        $(document).on('click', '#back-btn', function () {
-            $('#listadoHabitats').hide();
-            $('#selectHabitats').show();
-        })
     });
 
+    $(document).on('click', '#selectHabitats', function () {
+        $('#selectHabitats').hide();
+        $('#listadoHabitats').show();
+
+    })
+
+    $(document).on('click', '#back-btn', function () {
+        $('#listadoHabitats').hide();
+        $('#selectHabitats').show();
+    })
+
+    //Cuando pulso sobre un boton de un habitat
     $(document).on('click', '.btn-filter-habitat', function () {
-        $('.barraBuscar').val("");
-        var habitatClicked = $(this).attr("habitat");
+        $('#barraBuscar').val("");
+        var habitatClicked = $(this).attr("habitatId");
+        mostrarPokemonPorHabitat(habitatClicked);
+    });
 
-        // Mostrar todos los elementos ocultos cuando se filtra un hábitat
-        elementosPokemonOcultos.forEach(function (elemento) {
-            elemento.show();
-        });
-
+    function mostrarPokemonPorHabitat(habitat) {
         $.ajax({
             type: "GET",
-            url: `https://pokeapi.co/api/v2/pokemon-habitat/${habitatClicked}`
+            url: `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`
         }).done(function (resp) {
-            var pokemonListInHabitat = resp.pokemon_species.map(pokemon => pokemon.name);
+            var pokemonNameListInHabitat = resp.pokemon_species.map(pokemon => pokemon.name);
+            var listadoPokemon2 = [];
 
-            // Ocultar Pokémon que no pertenecen al hábitat
             listadoPokemon.forEach(pokemon => {
-                if (!pokemonListInHabitat.includes(pokemon.name)) {
-                    var elementoPokemon = $(`#${pokemon.name}`);
-                    elementoPokemon.hide();
-                    elementosPokemonOcultos.push(elementoPokemon);
+                if (pokemonNameListInHabitat.includes(pokemon.name)) {
+                    listadoPokemon2.push(pokemon);
                 }
             });
+
+            $('#listadoPokemon').empty();
+            mostrarListado(listadoPokemon2)
         });
-    });
+    }
+
+    function mostrarListado(listado) {
+        listado.forEach(pokemon => {
+            var template = `
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
+                <a href=""></a>
+                <div class="card">
+                    <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height:150px; width:110px; text-align:center;"
+                        class="card-img-top" alt="" />
+                    <div class="card-body">
+                        <h5 class="card-title">${pokemon.name}</h5>
+                        <p class="card-text">
+                            <li>#${getPokemonIdFromUrl(pokemon.url)}</li>
+                        </p>
+                        <button type="button" class="btn btn-primary moredetails" pokeid="${getPokemonIdFromUrl(pokemon.url)}">More details</button>
+                    </div>
+                </div>
+                </a>
+            </div>
+            `;
+            $('#listadoPokemon').append(template);
+        });
+    }
+
+
     $(document).on('click', '.moredetails', function () {
         var pokemonId = $(this).attr('pokeid');
         $.ajax({
@@ -137,7 +130,6 @@ $(document).ready(function () {
             type: 'GET',
         }).done(function (response) {
             ability = response.abilities[0].ability.name;
-            //Recorrer array
 
             var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
             $('#imagenPokemon').attr('src', newSrc);
@@ -172,4 +164,5 @@ $(document).ready(function () {
         // Sacar id de la url de pokemon
         return url.split('/').reverse()[1];
     }
+
 });
