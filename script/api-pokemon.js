@@ -1,8 +1,9 @@
 $(document).ready(function () {
     var listadoPokemon;
     var elementosPokemonOcultos = [];
-    var campoDeBusqueda = $('.barraBuscar');
-    var botonBusqueda = $('.btn-search');
+    var campoDeBusqueda = $('#barraBuscar');
+    //var botonBusqueda = $('#btn-search');
+    var showAll = false;
 
     $.ajax({
         type: "GET",
@@ -31,8 +32,11 @@ $(document).ready(function () {
             $('#listadoPokemon').append(template);
 
         });
-        $(document).on('click', botonBusqueda, buscar);
-        $(document).on('keyup', '.barraBuscar', buscar);
+
+        $(document).on('keyup', '#barraBuscar', function () {
+            buscar();
+        });
+
         function buscar() {
             // Obtner el valor del campo de búsqueda
             valorBusqueda = campoDeBusqueda.val().toLowerCase();
@@ -44,9 +48,7 @@ $(document).ready(function () {
                 // Comprueba si el nombre del Pokémon contiene el texto de búsqueda
                 if (nombrePokemon.includes(valorBusqueda)) {
                     // Muestra el elemento si coincide con la búsqueda
-                    if ($(this).is(':visible')) {
-                        $(this).show();
-                    }
+                    $(this).show();
                 } else {
                     // Oculta el elemento si no coincide con la búsqueda
                     $(this).hide();
@@ -88,6 +90,7 @@ $(document).ready(function () {
             $('#listadoHabitats').show();
 
             $(document).on('click', '#allHabitats', function () {
+                showAll = true;
                 $('.barraBuscar').val("");
                 elementosPokemonOcultos.forEach(function (elemento) {
                     elemento.show();
