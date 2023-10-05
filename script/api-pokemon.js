@@ -1,9 +1,12 @@
 $(document).ready(function () {
     var listadoPokemon;
     var elementosPokemonOcultos = [];
+    var campoDeBusqueda = $('.barraBuscar');
+    var botonBusqueda = $('.btn-search');
+
     $.ajax({
         type: "GET",
-        url: "https://pokeapi.co/api/v2/pokemon?limit=151/",
+        url: "https://pokeapi.co/api/v2/pokemon?limit=1200/",
     }).done(function (resp) {
         listadoPokemon = resp.results;
         listadoPokemon.forEach(pokemon => {
@@ -30,12 +33,35 @@ $(document).ready(function () {
             $('#listadoPokemon').append(template);
 
         });
+        $(document).on('click', botonBusqueda, buscar);
+        $(document).on('keyup', '.barraBuscar', buscar);
+        function buscar() {
+            // Obtner el valor del campo de búsqueda
+            valorBusqueda = campoDeBusqueda.val().toLowerCase();
+
+            // Realiza la búsqueda en los elementos que deseas filtrar (por ejemplo, en los nombres de los Pokémon)
+            $('.cartaPokemon').each(function () {
+                var nombrePokemon = $(this).find('.card-title').text().toLowerCase();
+
+                // Comprueba si el nombre del Pokémon contiene el texto de búsqueda
+                if (nombrePokemon.includes(valorBusqueda)) {
+                    // Muestra el elemento si coincide con la búsqueda
+                    if ($(this).is(':visible')) {
+                        $(this).show();
+                    }
+                } else {
+                    // Oculta el elemento si no coincide con la búsqueda
+                    $(this).hide();
+                }
+            });
+        }
     });
 
     $.ajax({
         type: "GET",
         url: "https://pokeapi.co/api/v2/pokemon-habitat/"
     }).done(function (resp) {
+        valorBusqueda = "";
         var listHabitat = resp.results;
         var habitatList = [];
 
@@ -64,6 +90,7 @@ $(document).ready(function () {
             $('#listadoHabitats').show();
 
             $(document).on('click', '#allHabitats', function () {
+                $('.barraBuscar').val("");
                 elementosPokemonOcultos.forEach(function (elemento) {
                     elemento.show();
                 });
@@ -78,6 +105,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.btn-filter-habitat', function () {
+        $('.barraBuscar').val("");
         var habitatClicked = $(this).attr("habitat");
 
         // Mostrar todos los elementos ocultos cuando se filtra un hábitat
