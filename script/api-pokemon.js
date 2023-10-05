@@ -1,8 +1,9 @@
 $(document).ready(function () {
     var listadoPokemon;
     var campoDeBusqueda = $('#barraBuscar');
-    //var botonBusqueda = $('#btn-search');
-    var showAll = false;
+    var resultados = 20;
+    //PAginación
+    //<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 
     $.ajax({
         type: "GET",
@@ -15,7 +16,6 @@ $(document).ready(function () {
             $('#barraBuscar').val("");
             $('#listadoPokemon').empty();
             mostrarListado(listadoPokemon);
-            debugger;
         })
     });
 
