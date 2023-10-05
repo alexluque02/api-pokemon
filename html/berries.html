@@ -29,10 +29,10 @@
                             style="width: 150px;"></a>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">CHARACTERS</a>
+                            <a class="nav-link " href="api-pokemon.html">CHARACTERS</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="berries.html">BERRIES</a>
+                            <a class="nav-link active" aria-current="page" href="#">BERRIES</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link">ITEMS</a>
@@ -45,7 +45,7 @@
             <form class="input-group busqueda">
                 <input type="search" class="form-control barraBuscar" placeholder="Search Character"
                     aria-label="Search" />
-                <button class="btn btn-light btn-search" type="button" data-bs-ripple-color="dark">
+                <button class="btn btn-light" type="button" data-bs-ripple-color="dark">
                     <i class="bi bi-search"></i>
                 </button>
             </form>
@@ -54,29 +54,22 @@
     </header>
     <main>
         <div class="container">
-            <h1 class="m-4 text-center text-light fw-bolder">CHARACTERS</h1>
-            <a href="#" id="selectHabitats" class="button-container">
-                <div class="habitats col-3 bg-light m-3 d-flex w-100">
-                    <h5>HABITATS</h5>
-                    <i class="bi bi-arrow-right-short"></i>
-                </div>
-            </a>
+            <h1 class="m-4 text-center text-light fw-bolder">BERRIES</h1>
             <div id="listadoHabitats">
 
             </div>
             <div class="carousel-inner py-4">
                 <div class="carousel-item active">
                     <div class="container">
-                        <div class="row" id="listadoPokemon">
+                        <div class="row" id="listadoBerries">
                             <div id="details">
                                 <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalCenterTitle" style="color: black;">
-
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content" id="modalCharacter">
 
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="nombrePokemon"></h5>
+                                                <h5 class="modal-title" id="nombreBerries"></h5>
                                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
                                                     aria-label="Close">X
                                                 </button>
@@ -84,13 +77,11 @@
                                             <div class="modal-body">
                                                 <table>
                                                     <ul>
-                                                        <li id="habitatPokemon">Habitat:unknown</li>
-                                                        <li id="habilidadPokemon">Habilities:unknown</li>
-                                                        <li id="alturaPokemon">Height:unknown</li>
-                                                        <li id="pesoPokemon">Weight:unknown</li>
+                                                        <li id="potencyBerrie"></li>
+                                                        <li id="flavourBerrie"></li>
                                                     </ul>
                                                 </table>
-                                                <img src="../img/1.png" id="imagenPokemon">
+                                                <img src="../img/1.png" id="imagenBerrie">
                                                 <div class="frame1" id="tipoPokemon">
                                                     <div class="text-wrapper1" id="tipo1"></div>
                                                 </div>
@@ -114,7 +105,7 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="../script/api-pokemon.js"></script>
+    <script src="../script/berries.js"></script>
 </body>
 
 </html>
