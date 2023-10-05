@@ -10,13 +10,11 @@ $(document).ready(function () {
     }).done(function (resp) {
         listadoPokemon = resp.results;
         listadoPokemon.forEach(pokemon => {
-
-            var nameReplace = pokemon.name.replace(/-/g, "_");
             var template = `
             <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
                                 <a href=""></a>
                                 <div class="card">
-                                    <img src="https://www.pkparaiso.com/imagenes/xy/sprites/animados/${nameReplace}.gif" style="height:150px; width:110px; text-align:center;"
+                                    <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height:150px; width:110px; text-align:center;"
                                         class="card-img-top" alt="" />
                                     <div class="card-body">
                                         <h5 class="card-title">${pokemon.name}</h5>
