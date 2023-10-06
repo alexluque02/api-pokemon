@@ -42,21 +42,10 @@ $(document).ready(function () {
                 $('#nombreItem').text("Name:" + response.name);
                 $('#categoriaItem').text("Category: " + response.category.name);
                 $('#efectoEntrada').text("Effect:" + effecto);
+                $('#tipo1').text(response.attributes[0].name);
+                $('#tipo2').text(response.attributes[1].name);
                 $('#coste').text("Cost: " + response.cost)
                 $('#modalDetails').modal('show')
-                for (var i = 0; i < response.attributes.length; i++) {
-                    var tipoItem = document.createElement('div');
-                    tipoItem.className = 'frame' + (i + 1);
-                    tipoItem.id = 'tipoItem' + (i + 1);
-
-                    var textWrapper = document.createElement('div');
-                    textWrapper.className = 'text-wrapper' + (i + 1);
-                    textWrapper.id = 'tipo' + (i + 1);
-
-                    tipoItem.appendChild(textWrapper);
-                    document.body.appendChild(tipoItem);
-                    $(`#tipo${i + 1}`).text(response.attributes[i + 1].name);
-                }
             }
         });
     });
