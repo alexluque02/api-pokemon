@@ -29,16 +29,34 @@ $(document).ready(function () {
             });
         }
     });
-    $(document).on('click', '.moreDetails', function () {
+    $(document).on('click', '.moredetails', function () {
         var itemId = $(this).attr('pokeid');
         $.ajax({
             type: "GET",
             url: `https://pokeapi.co/api/v2/item/${itemId}`,
             success: function (response) {
-                var nameReplace = item.name.replace(/_/g, "-");
-                var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${nameReplace}.png`
+                //var nameReplace = item.name.replace(/_/g, "-");
+                effecto = response.effect_entries[0].short_effect
+                var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}.png`
                 $('#imagenItem').attr('src', newSrc);
+                $('#nombreItem').text("Name:" + response.name);
+                $('#categoriaItem').text("Category: " + response.category.name);
+                $('#efectoEntrada').text("Effect:" + effecto);
+                $('#coste').text("Cost: " + response.cost)
                 $('#modalDetails').modal('show')
+                for (var i = 0; i < response.attributes.length; i++) {
+                    var tipoItem = document.createElement('div');
+                    tipoItem.className = 'frame' + (i + 1);
+                    tipoItem.id = 'tipoItem' + (i + 1);
+
+                    var textWrapper = document.createElement('div');
+                    textWrapper.className = 'text-wrapper' + (i + 1);
+                    textWrapper.id = 'tipo' + (i + 1);
+
+                    tipoItem.appendChild(textWrapper);
+                    document.body.appendChild(tipoItem);
+                    $(`#tipo${i + 1}`).text(response.attributes[i + 1].name);
+                }
             }
         });
     });
