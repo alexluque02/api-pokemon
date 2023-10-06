@@ -2,22 +2,50 @@ $(document).ready(function () {
     var listadoPokemon;
     var campoDeBusqueda = $('#barraBuscar');
     var resultados = 20;
-    //PAginación
+    var totalPokemon
+    var offset;
+    var urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`;
+    var paginas;
+    //Paginación
     //<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 
     $.ajax({
         type: "GET",
-        url: "https://pokeapi.co/api/v2/pokemon?limit=1200/",
+        url: urlPokemon,
     }).done(function (resp) {
+
+        debugger;
+
         listadoPokemon = resp.results;
         mostrarListado(listadoPokemon)
+
+        totalPokemon = resp.count;
+        paginas = totalPokemon / resultados;
+
+        for (var i = 0; i < paginas; i++) {
+            var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`
+            $('.pagination').append(template);
+        }
 
         $(document).on('click', '#allHabitats', function () {
             $('#barraBuscar').val("");
             $('#listadoPokemon').empty();
             mostrarListado(listadoPokemon);
         })
+
     });
+
+    $(document).on('click', '.page-item', function () {
+        offset = parseInt($(this).attr("pageId")) * resultados;
+        urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`
+        $.ajax({
+            type: "GET",
+            url: urlPokemon,
+        }).done(function (resp) {
+            listadoPokemon = resp.results;
+            mostrarListado(listadoPokemon);
+        });
+    })
 
     $(document).on('keyup', '#barraBuscar', function () {
         buscar();
