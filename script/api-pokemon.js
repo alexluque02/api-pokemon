@@ -6,45 +6,74 @@ $(document).ready(function () {
     var offset;
     var urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`;
     var paginas;
-    //Paginación
-    //<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    var pagActual = 0;
 
-    $.ajax({
-        type: "GET",
-        url: urlPokemon,
-    }).done(function (resp) {
+    function inicializarPaginacion() {
+        paginas = Math.ceil(totalPokemon / resultados); // Usar Math.ceil para redondear hacia arriba
 
-        debugger;
+        generarPaginacion(pagActual, paginas);
+    }
 
-        listadoPokemon = resp.results;
-        mostrarListado(listadoPokemon)
+    function generarPaginacion(pagActual, totalPaginas) {
+        var pageRange = 3;
+        var startPage = Math.max(0, pagActual - pageRange);
+        var endPage = Math.min(totalPaginas - 1, pagActual + pageRange);
 
-        totalPokemon = resp.count;
-        paginas = totalPokemon / resultados;
+        $('.pagination').empty();
 
-        for (var i = 0; i < paginas; i++) {
-            var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`
+        var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link">Primera</a></li>`;
+        $('.pagination').append(firstPageButton);
+
+        for (var i = startPage; i <= endPage; i++) {
+            var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`;
             $('.pagination').append(template);
         }
 
-        $(document).on('click', '#allHabitats', function () {
-            $('#barraBuscar').val("");
-            $('#listadoPokemon').empty();
-            mostrarListado(listadoPokemon);
-        })
+        var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link">Última</a></li>`;
+        $('.pagination').append(lastPageButton);
+    }
 
-    });
+    function cargarPagina(page) {
+        var offset = page * resultados;
+        urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=${resultados}&offset=${offset}`;
 
-    $(document).on('click', '.page-item', function () {
-        offset = parseInt($(this).attr("pageId")) * resultados;
-        urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`
         $.ajax({
             type: "GET",
             url: urlPokemon,
         }).done(function (resp) {
             listadoPokemon = resp.results;
+            totalPokemon = resp.count;
+            inicializarPaginacion()
+            $('#listadoPokemon').empty();
             mostrarListado(listadoPokemon);
         });
+    }
+
+    cargarPagina(pagActual);
+    generarPaginacion(pagActual, 6);
+
+    $.ajax({
+        type: "GET",
+        url: urlPokemon,
+    }).done(function (resp) {
+        listadoPokemon = resp.results;
+
+        $(document).on('click', '#allHabitats', function () {
+            $('.pagination').show();
+            $('#barraBuscar').val("");
+            $('#listadoPokemon').empty();
+            cargarPagina(0);
+            mostrarListado(listadoPokemon);
+        })
+    });
+
+    $(document).on('click', '.page-item', function () {
+        var newPage = parseInt($(this).attr("pageId"));
+        pagActual = newPage; // Actualiza la página actual
+        debugger;
+        cargarPagina(pagActual); // Carga la página correspondiente
+        generarPaginacion(pagActual, paginas); // Actualiza la paginación
+
     })
 
     $(document).on('keyup', '#barraBuscar', function () {
@@ -114,16 +143,26 @@ $(document).ready(function () {
             url: `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`
         }).done(function (resp) {
             var pokemonNameListInHabitat = resp.pokemon_species.map(pokemon => pokemon.name);
-            var listadoPokemon2 = [];
 
-            listadoPokemon.forEach(pokemon => {
-                if (pokemonNameListInHabitat.includes(pokemon.name)) {
-                    listadoPokemon2.push(pokemon);
-                }
+            // Oculta la paginación antes de hacer la segunda solicitud AJAX
+            $('.pagination').hide();
+
+            // Hacer la segunda solicitud AJAX para obtener la lista completa de Pokémon
+            $.ajax({
+                type: "GET",
+                url: `https://pokeapi.co/api/v2/pokemon?limit=${totalPokemon}`
+            }).done(function (pok) {
+                var listadoPokemon2 = [];
+
+                pok.results.forEach(pokemon => {
+                    if (pokemonNameListInHabitat.includes(pokemon.name)) {
+                        listadoPokemon2.push(pokemon);
+                    }
+                });
+
+                $('#listadoPokemon').empty();
+                mostrarListado(listadoPokemon2);
             });
-
-            $('#listadoPokemon').empty();
-            mostrarListado(listadoPokemon2)
         });
     }
 
