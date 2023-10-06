@@ -101,8 +101,58 @@ body {
     }
 }
 
-
 /*
+    JUGAR CON ESTO PARA LOS ESTILOS
+..............................................................................
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-sm-4">
+
+      <div class="overlap-group position-relative">
+
+        <img 
+          class="rectangle w-100" 
+          src="img/rectangle-2.png">
+
+        <img
+          class="frame position-absolute"
+          src="img/frame-1.png">
+
+        <img 
+          class="image position-absolute"
+          src="img/image-3.png">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+.overlap-group {
+  height: 333px; 
+}
+
+.rectangle {
+  height: 130px;
+  top: 37px;
+}
+
+.frame {
+  height: 211px;
+  top: 122px;  
+}
+
+.image {
+  width: 87px;
+  height: 102px;
+  top: 0;
+  left: 94px;
+}
+
+--------------------------------------------------------------------------------------
 .carta {
     width: 185px;
     height: 130px;
