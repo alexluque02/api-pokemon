@@ -9,7 +9,7 @@ $(document).ready(function () {
     var pagActual = 0;
 
     function inicializarPaginacion() {
-        paginas = Math.ceil(totalPokemon / resultados); // Usar Math.ceil para redondear hacia arriba
+        paginas = Math.ceil(totalPokemon / resultados);
 
         generarPaginacion(pagActual, paginas);
     }
@@ -21,7 +21,7 @@ $(document).ready(function () {
 
         $('.pagination').empty();
 
-        var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link">Primera</a></li>`;
+        var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link"> <span aria-hidden="true">&laquo;</span></a></li>`;
         $('.pagination').append(firstPageButton);
 
         for (var i = startPage; i <= endPage; i++) {
@@ -29,7 +29,7 @@ $(document).ready(function () {
             $('.pagination').append(template);
         }
 
-        var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link">Última</a></li>`;
+        var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link"> <span aria-hidden="true">&raquo;</span></a></li>`;
         $('.pagination').append(lastPageButton);
     }
 
