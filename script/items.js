@@ -7,14 +7,57 @@ $(document).ready(function () {
     var urlItems = `https://pokeapi.co/api/v2/item?limit=20&offset=${offset}`;
     var paginas;
     var pagActual = 0;
-    $.ajax({
-        type: "GET",
-        url: urlItems,
-        success: function (response) {
-            listadoItems = response.results;
-            mostrarListado(listadoItems);
+
+    function inicializarPaginacion() {
+        paginas = Math.ceil(totalItems / resultados);
+
+        generarPaginacion(pagActual, paginas);
+    }
+
+    function generarPaginacion(pagActual, totalPaginas) {
+        var pageRange = 3;
+        var startPage = Math.max(0, pagActual - pageRange);
+        var endPage = Math.min(totalPaginas - 1, pagActual + pageRange);
+
+        $('.pagination').empty();
+
+        var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link"> <span aria-hidden="true">&laquo;</span></a></li>`;
+        $('.pagination').append(firstPageButton);
+
+        for (var i = startPage; i <= endPage; i++) {
+            var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`;
+            $('.pagination').append(template);
         }
-    });
+
+        var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link"> <span aria-hidden="true">&raquo;</span></a></li>`;
+        $('.pagination').append(lastPageButton);
+    }
+
+    function cargarPagina(page) {
+        var offset = page * resultados;
+        urlItems = `https://pokeapi.co/api/v2/item?limit=${resultados}&offset=${offset}`;
+        $.ajax({
+            type: "GET",
+            url: urlItems,
+        }).done(function (resp) {
+            listadoItems = resp.results;
+            totalItems = resp.count;
+            inicializarPaginacion()
+            $('#listadoItems').empty();
+            mostrarListado(listadoItems);
+        });
+    }
+
+    cargarPagina(pagActual);
+    generarPaginacion(pagActual, 4);
+
+    $(document).on('click', '.page-item', function () {
+        var newPage = parseInt($(this).attr("pageId"));
+        pagActual = newPage; // Actualiza la página actual
+        cargarPagina(pagActual); // Carga la página correspondiente
+        generarPaginacion(pagActual, paginas); // Actualiza la paginación
+
+    })
 
     $(document).on('click', '.moredetails', function () {
         var itemId = $(this).attr('pokeid');
