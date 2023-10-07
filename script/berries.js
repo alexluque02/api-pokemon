@@ -8,14 +8,57 @@ $(document).ready(function () {
     var paginas;
     var pagActual = 0;
 
-    $.ajax({
-        type: "GET",
-        url: urlBerries,
-    }).done(function (resp) {
-        listadoBerries = resp.results;
-        totalBerries = resp.count;
-        mostrarListado(listadoBerries);
-    });
+    function inicializarPaginacion() {
+        paginas = Math.ceil(totalBerries / resultados);
+
+        generarPaginacion(pagActual, paginas);
+    }
+
+    function generarPaginacion(pagActual, totalPaginas) {
+        var pageRange = 3;
+        var startPage = Math.max(0, pagActual - pageRange);
+        var endPage = Math.min(totalPaginas - 1, pagActual + pageRange);
+
+        $('.pagination').empty();
+
+        var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link"> <span aria-hidden="true">&laquo;</span></a></li>`;
+        $('.pagination').append(firstPageButton);
+
+        for (var i = startPage; i <= endPage; i++) {
+            var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`;
+            $('.pagination').append(template);
+        }
+
+        var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link"> <span aria-hidden="true">&raquo;</span></a></li>`;
+        $('.pagination').append(lastPageButton);
+    }
+
+    function cargarPagina(page) {
+        var offset = page * resultados;
+        urlBerries = `https://pokeapi.co/api/v2/berry?limit=${resultados}&offset=${offset}`;
+
+        $.ajax({
+            type: "GET",
+            url: urlBerries,
+        }).done(function (resp) {
+            listadoBerries = resp.results;
+            totalBerries = resp.count;
+            inicializarPaginacion()
+            $('#listadoBerries').empty();
+            mostrarListado(listadoBerries);
+        });
+    }
+
+    cargarPagina(pagActual);
+    generarPaginacion(pagActual, 4);
+
+    $(document).on('click', '.page-item', function () {
+        var newPage = parseInt($(this).attr("pageId"));
+        pagActual = newPage; // Actualiza la página actual
+        cargarPagina(pagActual); // Carga la página correspondiente
+        generarPaginacion(pagActual, paginas); // Actualiza la paginación
+
+    })
 
     $(document).on('keyup', '#barraBuscar', function () {
         buscar();
@@ -59,7 +102,6 @@ $(document).ready(function () {
     }
 
     function getBerrieIdFromUrl(url) {
-        // Sacar id de la url de pokemon
         return url.split('/').reverse()[1];
     }
     $(document).on('click', '.moredetails', function () {
