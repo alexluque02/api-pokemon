@@ -7,6 +7,7 @@ $(document).ready(function () {
     var urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`;
     var paginas;
     var pagActual = 0;
+    var habitatActual;
 
     function inicializarPaginacion() {
         paginas = Math.ceil(totalPokemon / resultados);
@@ -196,7 +197,6 @@ $(document).ready(function () {
             type: 'GET',
         }).done(function (response) {
             ability = response.abilities[0].ability.name;
-
             var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
             $('#imagenPokemon').attr('src', newSrc);
 
@@ -220,6 +220,7 @@ $(document).ready(function () {
                 $('#tipo2').text(type2);
             }
             $('#nombrePokemon').text("Name:" + response.name);
+            $('#habitatPokemon').text("Habitat: " + saberHabitat(response.name));
             $('#habilidadPokemon').text("Habilidad:" + ability);
             $('#alturaPokemon').text("Height:" + response.height + "fts");
             $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
@@ -229,6 +230,26 @@ $(document).ready(function () {
     function getPokemonIdFromUrl(url) {
         // Sacar id de la url de pokemon
         return url.split('/').reverse()[1];
+    }
+
+    async function saberHabitat(pokemonName) {
+        var habitatResponse = await $.ajax({
+            type: "GET",
+            url: "https://pokeapi.co/api/v2/pokemon-habitat/"
+        });
+
+        totalHabitats = habitatResponse.count;
+        for (var i = 0; i < totalHabitats; i++) {
+            var habitat = await $.ajax({
+                type: "GET",
+                url: `https://pokeapi.co/api/v2/pokemon-habitat/${i + 1}`
+            });
+
+            if (habitat.pokemon_species.some(species => species.name === pokemonName)) {
+                return habitat.name;
+            }
+        }
+        return "Hábitat no encontrado";
     }
 
 });

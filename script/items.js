@@ -65,12 +65,12 @@ $(document).ready(function () {
             type: "GET",
             url: `https://pokeapi.co/api/v2/item/${itemId}`,
             success: function (response) {
-                effecto = response.effect_entries[0].short_effect
+                efecto = response.effect_entries[0].short_effect
                 var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}.png`
                 $('#imagenItem').attr('src', newSrc);
                 $('#nombreItem').text("Name:" + response.name);
                 $('#categoriaItem').text("Category: " + response.category.name);
-                $('#efectoEntrada').text("Effect:" + effecto);
+                $('#efectoEntrada').text("Effect:" + efecto);
                 $('#tipo1').text(response.attributes[0].name);
                 $('#tipo2').text(response.attributes[1].name);
                 $('#coste').text("Cost: " + response.cost)
