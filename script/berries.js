@@ -1,5 +1,12 @@
 $(document).ready(function () {
     var listadoBerries;
+    var campoDeBusqueda = $('#barraBuscar');
+    var resultados = 20;
+    var totalPokemon
+    var offset;
+    var urlPokemon = `https://pokeapi.co/api/v2/berry?limit=20&offset=${offset}`;
+    var paginas;
+    var pagActual = 0;
     $.ajax({
         type: "GET",
         url: "https://pokeapi.co/api/v2/berry?limit=64/",
