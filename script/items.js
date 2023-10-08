@@ -111,10 +111,9 @@ $(document).ready(function () {
     }
 
     function mostrarListado(listado) {
-        https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item.name}.png
         listado.forEach(item => {
             var template = `
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaPokemon" id="${item.name}">
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaItem" id="${item.name}">
             <a href=""></a>
             <div class="card border-0">
                 <div class="position-relative">

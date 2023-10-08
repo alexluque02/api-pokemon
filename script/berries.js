@@ -80,7 +80,6 @@ $(document).ready(function () {
 
     function buscar() {
         valorBusqueda = campoDeBusqueda.val().toLowerCase();
-
         $('.cartaBerry').each(function () {
             var nombreBerry = $(this).find('.card-title').text().toLowerCase();
             if (nombreBerry.includes(valorBusqueda)) {
@@ -94,7 +93,7 @@ $(document).ready(function () {
     function mostrarListado(listado) {
         listado.forEach(berry => {
             var template = `
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaPokemon" id="${berry.name}">
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaBerry" id="${berry.name}">
             <a href=""></a>
             <div class="card border-0">
                 <div class="position-relative">
