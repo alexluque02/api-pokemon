@@ -7,7 +7,6 @@ $(document).ready(function () {
     var urlPokemon = `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`;
     var paginas;
     var pagActual = 0;
-    var habitatActual;
 
     function inicializarPaginacion() {
         paginas = Math.ceil(totalPokemon / resultados);
@@ -16,7 +15,7 @@ $(document).ready(function () {
     }
 
     function generarPaginacion(pagActual, totalPaginas) {
-        var pageRange = 3;
+        var pageRange = 2;
         var startPage = Math.max(0, pagActual - pageRange);
         var endPage = Math.min(totalPaginas - 1, pagActual + pageRange);
 
@@ -25,9 +24,24 @@ $(document).ready(function () {
         var firstPageButton = `<li pageId="0" class="page-item first-page-button"><a class="page-link"> <span aria-hidden="true">&laquo;</span></a></li>`;
         $('.pagination').append(firstPageButton);
 
+        if (pagActual > 0) {
+            var previousPageButton = `<li pageId="${pagActual - 1}" class="page-item"><a class="page-link"> <span aria-hidden="true">Previous</span></a></li>`;
+            $('.pagination').append(previousPageButton);
+        }
+
+        $('.page-item').removeClass('active');
         for (var i = startPage; i <= endPage; i++) {
             var template = `<li pageId="${i}" class="page-item"><a class="page-link">${i + 1}</a></li>`;
-            $('.pagination').append(template);
+            if (pagActual == i) {
+                $(template).addClass('active').appendTo('.pagination');
+            } else {
+                $('.pagination').append(template);
+            }
+        }
+
+        var nextPageButton = `<li pageId="${pagActual + 1}" class="page-item"><a class="page-link"> <span aria-hidden="true">Next</span></a></li>`;
+        if (pagActual < paginas - 1) {
+            $('.pagination').append(nextPageButton);
         }
 
         var lastPageButton = `<li pageId="${paginas - 1}" class="page-item last-page-button"><a class="page-link"> <span aria-hidden="true">&raquo;</span></a></li>`;
@@ -51,7 +65,6 @@ $(document).ready(function () {
     }
 
     cargarPagina(pagActual);
-    generarPaginacion(pagActual, 6);
 
     $.ajax({
         type: "GET",
@@ -60,6 +73,8 @@ $(document).ready(function () {
         listadoPokemon = resp.results;
 
         $(document).on('click', '#allHabitats', function () {
+            $('.btn-filter-habitat').removeClass('active');
+            $(this).addClass('active');
             $('.pagination').show();
             $('#barraBuscar').val("");
             $('#listadoPokemon').empty();
@@ -99,39 +114,28 @@ $(document).ready(function () {
     }).done(function (resp) {
         valorBusqueda = "";
         var habitatList = resp.results;
-
         var habitatLinks = habitatList.map(habitat => {
-            return `<button type="button" class="btn btn-filter-habitat" habitatId="${getPokemonIdFromUrl(habitat.url)}">${habitat.name.toUpperCase()}</button>`;
+            return `<button type="button" class="btn btn-filter-habitat" habitatId="${getPokemonIdFromUrl(habitat.url)}"><h5>${habitat.name.toUpperCase()}</h5></button>`;
         });
 
 
 
         var template = `
-        <div class="habitats col-12 bg-light m-3 d-flex w-100">
-            <button type="button" id="allHabitats" class="btn"><h5>ALL</h5></button>
-            <h5>${habitatLinks.join("&nbsp; ")}</h5>
-            <button type="button" id="back-btn" class="btn"><i class="bi bi-arrow-left-short"></i></button>
+        <div class="col-12">
+            <div class="habitats bg-light m-3 d-flex flex-wrap">
+                <button type="button" id="allHabitats" class="btn active"><h5>ALL HABITATS</h5></button>
+                ${habitatLinks.join("&nbsp; ")}
+            </div>
         </div>
         `;
 
-
-        $('#listadoHabitats').hide();
         $('#listadoHabitats').append(template);
     });
 
-    $(document).on('click', '#selectHabitats', function () {
-        $('#selectHabitats').hide();
-        $('#listadoHabitats').show();
-
-    })
-
-    $(document).on('click', '#back-btn', function () {
-        $('#listadoHabitats').hide();
-        $('#selectHabitats').show();
-    })
-
-    //Cuando pulso sobre un boton de un habitat
     $(document).on('click', '.btn-filter-habitat', function () {
+        $('#allHabitats').removeClass('active');
+        $('.btn-filter-habitat').removeClass('active');
+        $(this).addClass('active');
         $('#barraBuscar').val("");
         var habitatClicked = $(this).attr("habitatId");
         mostrarPokemonPorHabitat(habitatClicked);
@@ -143,11 +147,7 @@ $(document).ready(function () {
             url: `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`
         }).done(function (resp) {
             var pokemonNameListInHabitat = resp.pokemon_species.map(pokemon => pokemon.name);
-
-            // Oculta la paginación antes de hacer la segunda solicitud AJAX
             $('.pagination').hide();
-
-            // Hacer la segunda solicitud AJAX para obtener la lista completa de Pokémon
             $.ajax({
                 type: "GET",
                 url: `https://pokeapi.co/api/v2/pokemon?limit=${totalPokemon}`
@@ -169,21 +169,25 @@ $(document).ready(function () {
     function mostrarListado(listado) {
         listado.forEach(pokemon => {
             var template = `
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 cartaPokemon" id="${pokemon.name}">
-                <a href=""></a>
-                <div class="card">
-                    <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height:150px; width:110px; text-align:center;"
-                        class="card-img-top" alt="" />
-                    <div class="card-body">
-                        <h5 class="card-title">${pokemon.name}</h5>
-                        <p class="card-text">
-                            <li>#${getPokemonIdFromUrl(pokemon.url)}</li>
-                        </p>
-                        <button type="button" class="btn btn-primary moredetails" pokeid="${getPokemonIdFromUrl(pokemon.url)}">More details</button>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaPokemon" id="${pokemon.name}">
+            <a href=""></a>
+            <div class="card border-0">
+                <div class="position-relative">
+                    <div class="card-img-overlay d-flex align-items-center justify-content-center" style="background-color: rgba(255, 255, 255, 0.5); border-radius: 30px;">
+                        <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height: 150px; width: 110px; text-align: center;" class="card-img-top" alt="" />
+                    </div>
+                    <div class="card-img-overlay" style="border-radius: 30px;"></div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-white text-center">${pokemon.name}</h5>
+                    <p class="card-text text-white text-center">#${getPokemonIdFromUrl(pokemon.url)}</p>
+                    <div class="text-center">
+                        <button type="button" style="text-transform: uppercase; background-color: #FFC107; color: #3B5BA7;" class="btn moredetails mt-2" pokeid="${getPokemonIdFromUrl(pokemon.url)}">
+                        <strong>${pokemon.name}</strong> <i class="bi bi-info-circle" style="font-size: 0.8em;"></i></button>
                     </div>
                 </div>
-                </a>
             </div>
+        </div>
             `;
             $('#listadoPokemon').append(template);
         });
