@@ -73,6 +73,7 @@ $(document).ready(function () {
         listadoPokemon = resp.results;
 
         $(document).on('click', '#allHabitats', function () {
+            pagActual = 0;
             $('.btn-filter-habitat').removeClass('active');
             $(this).addClass('active');
             $('.pagination').show();
@@ -117,8 +118,6 @@ $(document).ready(function () {
         var habitatLinks = habitatList.map(habitat => {
             return `<button type="button" class="btn btn-filter-habitat" habitatId="${getPokemonIdFromUrl(habitat.url)}"><h5>${habitat.name.toUpperCase()}</h5></button>`;
         });
-
-
 
         var template = `
         <div class="col-12">
