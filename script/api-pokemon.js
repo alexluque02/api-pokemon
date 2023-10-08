@@ -168,6 +168,7 @@ $(document).ready(function () {
 
     function mostrarListado(listado) {
         listado.forEach(pokemon => {
+            const imagenError = "../img/imgNotFound.png"
             var template = `
             <div class="col-lg-3 col-md-6 col-sm-12 mb-3 mt-4 cartaPokemon" id="${pokemon.name}">
             <a href=""></a>
@@ -200,8 +201,14 @@ $(document).ready(function () {
             type: 'GET',
         }).done(async function (response) {
             ability = response.abilities[0].ability.name;
-            var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
-            $('#imagenPokemon').attr('src', newSrc);
+            var newSrc = `https://img.pokemondb.net/sprites/home/normal/${response.name}.png`;
+            var defaultImg = "../img/imgNotFound.png"
+            try {
+                $('#imagenPokemon').attr('src', newSrc);
+            } catch {
+                $('#imagenPokemon').attr('src', defaultImg);
+            }
+
 
             let type1 = '';
             let type2 = '';
@@ -222,12 +229,12 @@ $(document).ready(function () {
 
                 $('#tipo2').text(type2);
             }
-            $('#nombrePokemon').text("Name:" + response.name);
+            $('#nombrePokemon').text(response.name);
             var habitat = await saberHabitat(response.name);
-            $('#habitatPokemon').text("Habitat: " + habitat);
-            $('#habilidadPokemon').text("Habilidad:" + ability);
-            $('#alturaPokemon').text("Height:" + response.height + "fts");
-            $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
+            $('#habitatPokemon').text(habitat);
+            $('#habilidadPokemon').text(ability);
+            $('#alturaPokemon').text(response.height + "fts");
+            $('#pesoPokemon').text(response.weight + "lbs");
             $('#modalDetails').modal('show')
         });
     })

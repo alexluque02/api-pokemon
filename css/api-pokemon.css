@@ -108,6 +108,37 @@ body {
     }
 }
 
+.modal-body,
+.modal-footer {
+    border: none;
+}
+
+.modal-dialog {
+    margin-top: 0;
+}
+
+.label {
+    font-weight: bold;
+    width: 100px;
+    display: inline-block;
+}
+
+.value {
+    display: inline-block;
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.alineado {
+    width: 50%;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+
 .btn-filter-habitat.active h5,
 #allHabitats.active h5 {
     content: "";

@@ -76,28 +76,66 @@
 
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" id="modalCharacter">
-
-                    <div class="modal-header">
+                    <div class="modal-header" style="border: none;">
                         <h5 class="modal-title" id="nombrePokemon"></h5>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">X
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <table>
-                            <ul>
-                                <li id="habitatPokemon">Habitat:unknown</li>
-                                <li id="habilidadPokemon">Habilities:unknown</li>
-                                <li id="alturaPokemon">Height:unknown</li>
-                                <li id="pesoPokemon">Weight:unknown</li>
-                            </ul>
-                        </table>
-                        <img src="../img/1.png" id="imagenPokemon">
-                        <div class="frame1" id="tipoPokemon">
-                            <div class="text-wrapper1" id="tipo1"></div>
+                        <div class="row">
+                            <div class="col-md-6" style="height: 140px;">
+                                <div class="stats">
+
+                                    <ul>
+                                        <div class="alineado">
+                                            <li>
+                                                <span class="label">Habitat:</span>
+                                                <span class="value" id="habitatPokemon">unknown</span>
+                                            </li>
+
+                                            <li>
+                                                <span class="label">Abilities:</span>
+                                                <span class="value" id="habilidadPokemon">unknown</span>
+                                            </li>
+                                        </div>
+                                        <div class="alineado">
+                                            <li>
+                                                <span class="label">Height:</span>
+                                                <span class="value" id="alturaPokemon">unknown</span>
+                                            </li>
+
+                                            <li>
+                                                <span class="label">Weight:</span>
+                                                <span class="value" id="pesoPokemon">unknown</span>
+                                            </li>
+                                        </div>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="../img/imgNotFound.png" id="imagenPokemon" style="height:150px;">
+                            </div>
                         </div>
-                        <div class="frame2">
-                            <div class="text-wrapper2" id="tipo2"></div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+
+                        <div class="row mt-3 w-100">
+
+                            <div class="col-6 text-center">
+                                <div class="frame1" id="tipoPokemon">
+                                    <div class="text-wrapper1" id="tipo1"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 text-center">
+                                <div class="frame2">
+                                    <div class="text-wrapper2" id="tipo2"></div>
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>
