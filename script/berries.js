@@ -104,11 +104,12 @@ $(document).ready(function () {
     function getBerrieIdFromUrl(url) {
         return url.split('/').reverse()[1];
     }
+
     $(document).on('click', '.moredetails', function () {
         var berriesId = $(this).attr('pokeid');
         $.ajax({
             url: `https://pokeapi.co/api/v2/berry/${berriesId}`,
-            type: 'GET',
+            type: "GET",
         }).done(function (response) {
             var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}-berry.png`
             response.flavors.forEach(sabor => {
@@ -121,7 +122,8 @@ $(document).ready(function () {
             $('#nombreBerries').text("Name:" + response.name);
             $('#tipo1').text("Firmness: " + response.firmness.name);
             $('#tipo2').text("Size: " + response.size);
-            $('#modalDetails').modal('show')
+            $('#modalDetails').modal('show');
+            debugger;
         });
     })
 });
