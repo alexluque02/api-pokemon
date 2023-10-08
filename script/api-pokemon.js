@@ -189,13 +189,12 @@ $(document).ready(function () {
         });
     }
 
-
-    $(document).on('click', '.moredetails', function () {
+    $(document).on('click', '.moredetails', async function () {
         var pokemonId = $(this).attr('pokeid');
         $.ajax({
             url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
             type: 'GET',
-        }).done(function (response) {
+        }).done(async function (response) {
             ability = response.abilities[0].ability.name;
             var newSrc = `https://www.pkparaiso.com/imagenes/xy/sprites/animados/${response.name}.gif`
             $('#imagenPokemon').attr('src', newSrc);
@@ -220,7 +219,8 @@ $(document).ready(function () {
                 $('#tipo2').text(type2);
             }
             $('#nombrePokemon').text("Name:" + response.name);
-            $('#habitatPokemon').text("Habitat: " + saberHabitat(response.name));
+            var habitat = await saberHabitat(response.name);
+            $('#habitatPokemon').text("Habitat: " + habitat);
             $('#habilidadPokemon').text("Habilidad:" + ability);
             $('#alturaPokemon').text("Height:" + response.height + "fts");
             $('#pesoPokemon').text("Weight:" + response.weight + "lbs");
