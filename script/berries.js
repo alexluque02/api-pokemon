@@ -130,12 +130,12 @@ $(document).ready(function () {
             var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}-berry.png`
             response.flavors.forEach(sabor => {
                 if (sabor.potency != 0) {
-                    $('#flavourBerrie').text("Flavor:" + sabor.flavor.name);
-                    $('#potencyBerrie').text("Potency:" + sabor.potency);
+                    $('#flavourBerrie').text(sabor.flavor.name);
+                    $('#potencyBerrie').text(sabor.potency);
                 }
             });
             $('#imagenBerrie').attr('src', newSrc);
-            $('#nombreBerries').text("Name:" + response.name);
+            $('#nombreBerries').text(response.name.toUpperCase());
             $('#tipo1').text("Firmness: " + response.firmness.name);
             $('#tipo2').text("Size: " + response.size);
             $('#modalDetails').modal('show');

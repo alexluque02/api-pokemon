@@ -174,7 +174,8 @@ $(document).ready(function () {
             <div class="card border-0">
                 <div class="position-relative">
                     <div class="card-img-overlay d-flex align-items-center justify-content-center" style="background-color: rgba(255, 255, 255, 0.5); border-radius: 30px;">
-                        <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png" style="height: 150px; width: 110px; text-align: center;" class="card-img-top" alt="" />
+                        <img src="https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png"
+                        onerror="this.src='../img/imgNotFound.png';" style="height: 150px; width: 110px; text-align: center;" class="card-img-top" alt="" />
                     </div>
                     <div class="card-img-overlay" style="border-radius: 30px;"></div>
                 </div>
@@ -202,11 +203,9 @@ $(document).ready(function () {
             ability = response.abilities[0].ability.name;
             var newSrc = `https://img.pokemondb.net/sprites/home/normal/${response.name}.png`;
             var defaultImg = "../img/imgNotFound.png"
-            try {
-                $('#imagenPokemon').attr('src', newSrc);
-            } catch {
-                $('#imagenPokemon').attr('src', defaultImg);
-            }
+
+            $('#imagenPokemon').attr('src', newSrc);
+
 
 
             let type1 = '';
@@ -228,7 +227,7 @@ $(document).ready(function () {
 
                 $('#tipo2').text(type2);
             }
-            $('#nombrePokemon').text(response.name);
+            $('#nombrePokemon').text(response.name.toUpperCase());
             var habitat = await saberHabitat(response.name);
             $('#habitatPokemon').text(habitat);
             $('#habilidadPokemon').text(ability);

@@ -82,12 +82,12 @@ $(document).ready(function () {
                 efecto = response.effect_entries[0].short_effect
                 var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}.png`
                 $('#imagenItem').attr('src', newSrc);
-                $('#nombreItem').text("Name:" + response.name);
-                $('#categoriaItem').text("Category: " + response.category.name);
-                $('#efectoEntrada').text("Effect:" + efecto);
+                $('#nombreItem').text(response.name.toUpperCase());
+                $('#categoriaItem').text(response.category.name);
+                $('#efectoEntrada').text(efecto);
                 $('#tipo1').text(response.attributes[0].name);
                 $('#tipo2').text(response.attributes[1].name);
-                $('#coste').text("Cost: " + response.cost)
+                $('#coste').text(response.cost)
                 $('#modalDetails').modal('show')
             }
         });
@@ -118,7 +118,7 @@ $(document).ready(function () {
             <div class="card border-0">
                 <div class="position-relative">
                     <div class="card-img-overlay d-flex align-items-center justify-content-center" style="background-color: rgba(255, 255, 255, 0.5); border-radius: 30px;">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item.name}.png" style="height: 150px; width: 110px; text-align: center;" class="card-img-top" alt="" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item.name}.png"onerror="this.src='../img/imgNotFound.png';" style="height: 150px; width: 110px; text-align: center;" class="card-img-top" alt="" />
                     </div>
                     <div class="card-img-overlay" style="border-radius: 30px;"></div>
                 </div>

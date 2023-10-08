@@ -179,3 +179,25 @@ body {
     color: #6c757d;
     border: 1px solid #dee2e6;
 }
+
+.modal-dialog {
+    max-width: 90%;
+}
+
+@media(min-width: 276px) {
+    .modal-dialog {
+        max-width: 600px;
+    }
+}
+
+.stats ul {
+    display: flex;
+}
+
+.stats ul:last-child {
+    margin-top: 10px;
+}
+
+.alineado {
+    width: 50%;
+}

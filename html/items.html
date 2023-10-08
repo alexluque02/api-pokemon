@@ -72,26 +72,50 @@
 
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" id="modalCharacter">
-
-                    <div class="modal-header">
+                    <div class="modal-header" style="border: none;">
                         <h5 class="modal-title" id="nombreItem"></h5>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">X
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <table>
-                            <ul>
-                                <li id="categoriaItem"></li>
-                                <li id="efectoEntrada"></li>
-                                <li id="coste"></li>
-                            </ul>
-                        </table>
-                        <img src="../img/1.png" id="imagenItem">
-                        <div class="frame1" id="tipoItem">
-                            <div class="text-wrapper1" id="tipo1"></div>
+                        <div class="row">
+                            <div class="col-md-6" style="height: 140px;">
+                                <div class="stats">
+                                    <ul>
+                                        <li class="alineado">
+                                            <span class="label">Categoria:</span><br>
+                                            <span class="value" id="categoriaItem">unknown</span>
+                                        </li>
+                                        <li class="alineado">
+                                            <span class="label">Efecto:</span><br>
+                                            <span class="value" id="efectoEntrada">unknown</span>
+                                        </li>
+                                    </ul>
+
+                                    <ul>
+                                        <li class="alineado">
+                                            <span class="label">Coste:</span><br>
+                                            <span class="value" id="coste">unknown</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="../img/imgNotFound.png" id="imagenItem" style="height:150px;">
+                            </div>
                         </div>
-                        <div class="frame2" id="tipoItem">
-                            <div class="text-wrapper2" id="tipo2"></div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <div class="row mt-3 w-100">
+                            <div class="col-6 text-center">
+                                <div class="frame1" id="tipoPokemon">
+                                    <div class="text-wrapper1" id="tipo1"></div>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="frame2">
+                                    <div class="text-wrapper2" id="tipo2"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
