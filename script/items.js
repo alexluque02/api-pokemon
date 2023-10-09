@@ -79,20 +79,39 @@ $(document).ready(function () {
             type: "GET",
             url: `https://pokeapi.co/api/v2/item/${itemId}`,
             success: function (response) {
-                efecto = response.effect_entries[0].short_effect
-                var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}.png`
+                // Nombre del item
+                var nombreItem = response.name ? response.name.toUpperCase() : 'Nombre no disponible';
+
+                // Categoría del item
+                var categoriaItem = response.category ? response.category.name : 'Categoría no disponible';
+
+                // Efecto del item
+                var efecto = '';
+                if (response.effect_entries && response.effect_entries.length > 0) {
+                    efecto = response.effect_entries[0].short_effect;
+                } else {
+                    efecto = 'Efecto no disponible';
+                }
+
+                var tipo1 = response.attributes && response.attributes.length > 0 ? response.attributes[0].name : 'Tipo no disponible';
+
+                var tipo2 = response.attributes && response.attributes.length > 1 ? response.attributes[1].name : 'Tipo no disponible';
+
+                var coste = response.cost ? response.cost : 'Coste no disponible';
+
+                var newSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${response.name}.png`;
+
                 $('#imagenItem').attr('src', newSrc);
-                $('#nombreItem').text(response.name.toUpperCase());
-                $('#categoriaItem').text(response.category.name);
+                $('#nombreItem').text(nombreItem);
+                $('#categoriaItem').text(categoriaItem);
                 $('#efectoEntrada').text(efecto);
-                $('#tipo1').text(response.attributes[0].name);
-                $('#tipo2').text(response.attributes[1].name);
-                $('#coste').text(response.cost)
-                $('#modalDetails').modal('show')
+                $('#tipo1').text(tipo1);
+                $('#tipo2').text(tipo2);
+                $('#coste').text(response.cost);
+                $('#modalDetails').modal('show');
             }
         });
     });
-
     $(document).on('keyup', '#barraBuscar', function () {
         buscar();
     });
