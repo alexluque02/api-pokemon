@@ -67,9 +67,9 @@ $(document).ready(function () {
 
     $(document).on('click', '.page-item', function () {
         var newPage = parseInt($(this).attr("pageId"));
-        pagActual = newPage; // Actualiza la página actual
-        cargarPagina(pagActual); // Carga la página correspondiente
-        generarPaginacion(pagActual, paginas); // Actualiza la paginación
+        pagActual = newPage;
+        cargarPagina(pagActual);
+        generarPaginacion(pagActual, paginas);
 
     })
 
